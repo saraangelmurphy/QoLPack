@@ -43,7 +43,7 @@ public class qolp_modPlugin extends BaseModPlugin {
     @Override
     public void onGameLoad(boolean newGame) {
         if (qolp_getSettings.getBoolean("EnableClock")) {
-            addTransientScript(new qolp_clock(qolp_getSettings.getBoolean("12HourCLock")));
+            addTransientListener(new qolp_clock(qolp_getSettings.getBoolean("12HourCLock")));
         }
         if (qolp_getSettings.getBoolean("PartialSurveyAsYouFly")) {
             addTransientScript(new qolp_PartialSurveyScript());

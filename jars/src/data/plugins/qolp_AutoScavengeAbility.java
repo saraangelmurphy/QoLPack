@@ -9,10 +9,8 @@ import com.fs.starfarer.api.campaign.ai.ModularFleetAIAPI;
 import com.fs.starfarer.api.characters.AbilityPlugin;
 import com.fs.starfarer.api.impl.campaign.abilities.BaseToggleAbility;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
-import com.fs.starfarer.api.impl.campaign.rulecmd.salvage.HostileFleetNearbyAndAware;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.TooltipMakerAPI;
-import com.fs.starfarer.api.util.IntervalUtil;
 import com.fs.starfarer.api.util.Misc;
 
 public class qolp_AutoScavengeAbility extends BaseToggleAbility {
@@ -26,32 +24,40 @@ public class qolp_AutoScavengeAbility extends BaseToggleAbility {
     }
 
     public static void setOn(boolean isOn) {
+        AbilityPlugin ability = getInstance();
+        if (ability == null) return;
         if (isOn) {
-            getInstance().activate();
+            ability.activate();
         } else {
-            getInstance().deactivate();
+            ability.deactivate();
         }
     }
 
     private static AbilityPlugin getInstance() {
+        if (Global.getSector() == null || Global.getSector().getPlayerFleet() == null) return null;
         return Global.getSector().getPlayerFleet().getAbility("auto_scavenge");
     }
 
     @Override
     public void advance(float amount) {
-        if (amount == 0) {
+        super.advance(amount);
+        if (amount <= 0 || Global.getSector().isPaused()) {
             return;
         }
         timer += amount;
         if (!turnedOn) {
             return;
         }
+        // Do not open salvage dialogs over another interaction, menu, or battle.
+        if (Global.getSector().getCampaignUI().isShowingDialog()
+                || Global.getSector().getCampaignUI().isShowingMenu()
+                || Global.getSector().getPlayerFleet().getBattle() != null) return;
         AbilityPlugin scavenge = Global.getSector().getPlayerFleet().getAbility(Abilities.SCAVENGE);
         if (scavenge == null) {
             return;
         }
         if (timer >= maxTime && scavenge.isUsable()) {
-            if (hostileCHeck()){
+            if (hostileCHeck()) {
                 timer = 0;
             } else {
                 scavenge.activate();
@@ -113,6 +119,7 @@ public class qolp_AutoScavengeAbility extends BaseToggleAbility {
         //float range = params.get(0).getFloat(memoryMap);
 
         CampaignFleetAPI playerFleet = Global.getSector().getPlayerFleet();
+        if (playerFleet == null || playerFleet.getContainingLocation() == null) return true;
         for (CampaignFleetAPI fleet : playerFleet.getContainingLocation().getFleets()) {
             if (fleet.getAI() == null) continue; // dormant Remnant fleets
             if (fleet.getFaction().isPlayerFaction()) continue;

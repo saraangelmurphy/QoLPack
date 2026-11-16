@@ -1,3 +1,9 @@
+Version 1.5.5
+Adds TriOS installation links, direct update downloads, and public changelog tracking.
+Updates the campaign clock and preliminary surveying for Starsector 0.98.5a.
+Improves automatic scavenging and transponder transition handling.
+Focuses the pack on campaign features and removes the combat helper features.
+Credits PureTilt as the original author and saraangelmurphy as maintainer.
 Version 1.4
 AutoScavenge no longer attempts to scavenge if hostile fleet nearby
 Remote Survey no longer disables sustain burn

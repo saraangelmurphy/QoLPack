@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.LocationAPI;
 import com.fs.starfarer.api.campaign.listeners.CurrentLocationChangedListener;
 import com.fs.starfarer.api.impl.campaign.ids.Abilities;
+import com.fs.starfarer.api.characters.AbilityPlugin;
 
 public class qolp_TranspoffderListener implements CurrentLocationChangedListener {
 
@@ -19,7 +20,8 @@ public class qolp_TranspoffderListener implements CurrentLocationChangedListener
         }
         if (curr.isHyperspace()) {
             playerFleet.setTransponderOn(false);
-            playerFleet.getAbility(Abilities.TRANSPONDER).deactivate();
+            AbilityPlugin transponder = playerFleet.getAbility(Abilities.TRANSPONDER);
+            if (transponder != null) transponder.deactivate();
         }
     }
 }

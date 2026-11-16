@@ -1,0 +1,6 @@
+Original creator and main author: PureTilt.
+Maintainer: saraangelmurphy.
+
+Original project: https://github.com/PureTilt/QoLPack
+
+This maintained version will be removed upon request from the original author.

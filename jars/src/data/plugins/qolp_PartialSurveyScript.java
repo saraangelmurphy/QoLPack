@@ -15,7 +15,9 @@ public class qolp_PartialSurveyScript implements EveryFrameScript {
 
     @Override
     public void advance(float amount) {
+        if (amount <= 0 || Global.getSector() == null || Global.getSector().isPaused()) return;
         CampaignFleetAPI fleet = Global.getSector().getPlayerFleet();
+        if (fleet == null) return;
         StarSystemAPI system = fleet.getStarSystem();
         if (system == null) {
             return;
@@ -48,7 +50,7 @@ public class qolp_PartialSurveyScript implements EveryFrameScript {
     }
 
     private void process(CampaignFleetAPI fleet, PlanetAPI planet) {
-        String name = planet.getName();
+        if (planet == null || planet.isStar()) return;
         if (!isInRange(fleet, planet)) {
             return;
         }

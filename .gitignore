@@ -1,5 +1,8 @@
 
 out/
+build/
+dist/
+*.local.ps1
 *.rar
 *.zip
 .git
